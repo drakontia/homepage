@@ -4,14 +4,14 @@
 ## Development
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Build
 
 ```bash
-npm run build
+pnpm build
 ```
 
 - Blumeベースで構築

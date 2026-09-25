@@ -2,6 +2,7 @@
   "name": "homepage",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.0.0",
   "scripts": {
     "dev": "blume dev",
     "build": "blume build",
