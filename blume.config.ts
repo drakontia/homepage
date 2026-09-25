@@ -12,16 +12,9 @@ export default defineConfig({
   },
   navigation: {
     tabs: [
-      { label: "ホーム", path: "/" },
-      { label: "アプリ", path: "/apps" },
-      { label: "ブログ", path: "/blog" },
-    ],
-    featured: [
-      { label: "ChaosZeroNightmareDeckBuilder", href: "/apps/chaos-zero-nightmare-deck-builder" },
-      { label: "ChaosZeroNightmareChallengeChecker", href: "/apps/chaos-zero-nightmare-challenge-checker" },
-      { label: "ResonanceRateChecker", href: "/apps/resonance-rate-checker" },
-      { label: "ResonanceDeckBuilder", href: "/apps/resonance-deck-builder" },
-      { label: "EndfieldComboBuilder", href: "/apps/endfield-combo-builder" },
+      { label: "Home", path: "/" },
+      { label: "Apps", path: "/apps" },
+      { label: "Blog", path: "/blog" },
     ],
   },
   analytics: [vercelAnalytics()],
