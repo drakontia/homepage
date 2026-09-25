@@ -16,6 +16,13 @@ export default defineConfig({
       { label: "Apps", path: "/apps" },
       { label: "Blog", path: "/blog" },
     ],
+    featured: [
+      { label: "ChaosZeroNightmareDeckBuilder", href: "/apps/chaos-zero-nightmare-deck-builder" },
+      { label: "ChaosZeroNightmareChallengeChecker", href: "/apps/chaos-zero-nightmare-challenge-checker" },
+      { label: "ResonanceRateChecker", href: "/apps/resonance-rate-checker" },
+      { label: "ResonanceDeckBuilder", href: "/apps/resonance-deck-builder" },
+      { label: "EndfieldComboBuilder", href: "/apps/endfield-combo-builder" },
+    ],
   },
   analytics: [vercelAnalytics()],
   deployment: vercel(),
