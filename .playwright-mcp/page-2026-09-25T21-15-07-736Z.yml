@@ -1,0 +1,18 @@
+- main [ref=f2e2]:
+  - 'heading "404: Not found" [level=1] [ref=f2e7]'
+  - paragraph [ref=f2e8]:
+    - text: Your site is configured with
+    - code [ref=f2e9]: trailingSlash
+    - text: set to
+    - code [ref=f2e10]: never
+    - text: . Do you want to go to
+    - link "/apps/chaos-zero-nightmare-deck-builder" [ref=f2e11] [cursor=pointer]:
+      - /url: /apps/chaos-zero-nightmare-deck-builder
+    - text: instead?
+  - paragraph [ref=f2e12]:
+    - text: See
+    - link [ref=f2e13] [cursor=pointer]:
+      - /url: https://docs.astro.build/en/reference/configuration-reference/#trailingslash
+      - text: the documentation for
+      - code [ref=f2e14]: trailingSlash
+    - text: if you need help.
