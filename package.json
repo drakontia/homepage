@@ -12,6 +12,7 @@
     "blume": "^2.0.3"
   },
   "devDependencies": {
-    "@astrojs/cloudflare": "^14.3.3"
+    "@astrojs/cloudflare": "^14.3.3",
+    "wrangler": "4.145.0"
   }
 }
