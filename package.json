@@ -2,6 +2,7 @@
   "name": "homepage",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.0.0",
   "scripts": {
     "dev": "blume dev",
     "build": "blume build",
@@ -9,5 +10,9 @@
   },
   "dependencies": {
     "blume": "^2.0.3"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^14.3.3",
+    "wrangler": "4.145.0"
   }
 }

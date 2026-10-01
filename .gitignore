@@ -2,3 +2,5 @@ node_modules/
 .blume/
 dist/
 .vercel/
+.playwright-mcp/
+.blume-verify/

@@ -1,6 +1,10 @@
 import { defineConfig } from "blume";
-import { vercel as vercelAnalytics } from "blume/analytics";
-import { vercel } from "blume/deploy";
+import { cloudflare as cloudflareAnalytics } from "blume/analytics";
+import { cloudflare as cloudflareDeploy } from "blume/deploy";
+
+// Cloudflare Web Analytics のサイトトークンは、デプロイ前に Cloudflare ダッシュボードの
+// 「Web Analytics」から取得し、環境変数 CLOUDFLARE_ANALYTICS_TOKEN に設定すること。
+const cloudflareAnalyticsToken = process.env.CLOUDFLARE_ANALYTICS_TOKEN;
 
 export default defineConfig({
   title: "Drakontia Tools Hub",
@@ -17,8 +21,10 @@ export default defineConfig({
       { label: "Blog", path: "/blog" },
     ],
   },
-  analytics: [vercelAnalytics()],
-  deployment: vercel(),
+  analytics: cloudflareAnalyticsToken
+    ? [cloudflareAnalytics({ token: cloudflareAnalyticsToken })]
+    : [],
+  deployment: cloudflareDeploy(),
   agents: {
     llmsTxt: true,
   },
