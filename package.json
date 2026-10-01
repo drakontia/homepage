@@ -6,13 +6,15 @@
   "scripts": {
     "dev": "blume dev",
     "build": "blume build",
-    "doctor": "blume doctor"
+    "doctor": "blume doctor",
+    "test": "tsx --test test/*.test.ts"
   },
   "dependencies": {
     "blume": "^2.0.3"
   },
   "devDependencies": {
     "@astrojs/cloudflare": "^14.3.3",
+    "tsx": "4.20.6",
     "wrangler": "4.145.0"
   }
 }

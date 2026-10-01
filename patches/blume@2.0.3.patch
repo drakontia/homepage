@@ -1,0 +1,126 @@
+diff --git a/src/astro/render-deps.ts b/src/astro/render-deps.ts
+index 8eedc752b32c124c8d9d8265e7546f87a094f617..7a29f75f11438dcca5859790c717a86ec0bd1b03 100644
+--- a/src/astro/render-deps.ts
++++ b/src/astro/render-deps.ts
+@@ -9,6 +9,7 @@ import {
+   symlink,
+ } from "node:fs/promises";
+ import { isBuiltin } from "node:module";
++import { setTimeout } from "node:timers/promises";
+ 
+ import {
+   basename,
+@@ -121,6 +122,51 @@ const isWithin = (parent: string, child: string): boolean => {
+   return path === "" || !(path.startsWith("..") || isAbsolute(path));
+ };
+ 
++const pointsToTarget = async (
++  link: string,
++  target: string,
++  from: string
++): Promise<boolean> => {
++  try {
++    const existing = await lstat(link);
++    return (
++      existing.isSymbolicLink() &&
++      normalize(resolve(from, await readlink(link))) === normalize(target)
++    );
++  } catch {
++    return false;
++  }
++};
++
++const isBusyError = (error: unknown): boolean =>
++  typeof error === "object" &&
++  error !== null &&
++  "code" in error &&
++  error.code === "EBUSY";
++
++const createLink = async (
++  link: string,
++  linkTarget: string,
++  target: string,
++  from: string,
++  type: "dir" | "junction"
++): Promise<void> => {
++  for (let attempt = 0; ; attempt += 1) {
++    try {
++      await symlink(linkTarget, link, type);
++      return;
++    } catch (error) {
++      if (await pointsToTarget(link, target, from)) {
++        return;
++      }
++      if (!isBusyError(error) || attempt === 3) {
++        throw error;
++      }
++      await setTimeout(20 * (attempt + 1));
++    }
++  }
++};
++
+ /**
+  * Point `link` at the package directory `target`, replacing a link to anything
+  * else and leaving a real directory alone. The link is relative, so it keeps
+@@ -134,30 +180,47 @@ const linkPackageDir = async (link: string, target: string): Promise<void> => {
+   // the logical one under a symlinked parent (macOS's `/var` → `/private/var`),
+   // so the relative target is computed from the real path.
+   const from = normalize(await realpath(dirname(link)));
+-  let existing: Awaited<ReturnType<typeof lstat>> | null;
+-  try {
+-    existing = await lstat(link);
+-  } catch {
+-    existing = null;
++  let existing: Awaited<ReturnType<typeof lstat>> | null = null;
++  for (let attempt = 0; ; attempt += 1) {
++    try {
++      existing = await lstat(link);
++      break;
++    } catch (error) {
++      if (
++        typeof error === "object" &&
++        error !== null &&
++        "code" in error &&
++        error.code === "ENOENT"
++      ) {
++        break;
++      }
++      if (!isBusyError(error) || attempt === 3) {
++        throw error;
++      }
++      await setTimeout(20 * (attempt + 1));
++    }
+   }
+   if (existing) {
+     if (!existing.isSymbolicLink()) {
+       return;
+     }
+-    try {
+-      // Both sides in one separator style: Windows hands back `\\` paths.
+-      if (resolve(from, await readlink(link)) === normalize(target)) {
+-        return;
+-      }
+-    } catch {
+-      // An unreadable link is replaced below.
++    // Both sides in one separator style: Windows hands back `\\` paths.
++    if (await pointsToTarget(link, target, from)) {
++      return;
+     }
+     await rm(link, { force: true });
+   }
+   try {
+-    await symlink(relative(from, target), link, "dir");
++    await createLink(link, relative(from, target), target, from, "dir");
+   } catch {
+-    await symlink(target, link, "junction");
++    try {
++      await createLink(link, target, target, from, "junction");
++    } catch (error) {
++      if (await pointsToTarget(link, target, from)) {
++        return;
++      }
++      throw error;
++    }
+   }
+ };
+ 

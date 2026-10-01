@@ -3,3 +3,5 @@ allowBuilds:
   workerd: true
 minimumReleaseAgeExclude:
   - blume@2.0.3
+patchedDependencies:
+  blume@2.0.3: patches/blume@2.0.3.patch
