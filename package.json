@@ -10,5 +10,8 @@
   },
   "dependencies": {
     "blume": "^2.0.3"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "^14.3.3"
   }
 }
